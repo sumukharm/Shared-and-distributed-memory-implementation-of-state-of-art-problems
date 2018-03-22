@@ -20,7 +20,7 @@ void func(PARAMS)
 	for(k=start_rowx; k<=end_rowx; k++)
 		for(i=start_rowx; i<=end_rowx; i++)
 			for(j=start_colx; j<=end_colx; j++)
-				x[i][j]=min(x[i][j],x[i][k]+x[k][j]);
+				x[i][j]=min(x[i][j],x[i][k]+x[k][j]); //change
 }
 
 
@@ -35,7 +35,7 @@ void D_fw(PARAMS)
 		int i,j,k;
 		int offset=(end_colx-start_colx+1)/r;
 		for(k=1; k<=r; k++)
-		{
+		{we ca
 			cilk_for(i=1; i<=r; i++)
 			{
 				cilk_for(j=1; j<=r; j++)
@@ -139,7 +139,7 @@ void A_fw(PARAMS)
 			int i,j;
 			
 				
-			for(i=1, j=1; i<=r && j<=r; i++,j++)
+			for(i=1, j=1; i<=r && j<=r; i++,j++) //make it cilk for
                         {
                                 if(j!=k)
                                 {
@@ -155,9 +155,9 @@ void A_fw(PARAMS)
                                 start_rowv+(k-1)*offset,start_rowv+k*offset-1 ,start_colv+(k-1)*offset, start_colv+k*offset-1, n,r);
                                 }
 
-				cilk_sync;
+				cilk_sync;  //comment
                         }
-                        
+                        //write cilk sync here.
                        	
 			cilk_for(i=1; i<=r; i++)
 			{
@@ -165,6 +165,7 @@ void A_fw(PARAMS)
 				{
 				if((i!=k) && (j!=k))
 				{
+				//make it cilk spawn
 				D_fw(x, start_rowx+(i-1)*offset, start_rowx+i*offset-1, start_colx+(j-1)*offset, start_colx+j*offset-1,
 				start_rowu+(i-1)*offset, start_rowu+i*offset-1, start_colu+(k-1)*offset, start_colu+k*offset-1,
 				start_rowv+(k-1)*offset,start_rowv+k*offset-1 , start_colv+(j-1)*offset,start_colv+j*offset-1,n,r);
@@ -189,7 +190,7 @@ int main()
 	int x[100][100];
 	for(i=0; i<n; i++)
 		for(j=0; j<n; j++)
-			x[i][j]=graph[i][j];
+			x[i][j]=graph[i][j];		//just one matrix, no scan values, just fit with random values
 
 	 A_fw(x,0,n-1, 0,n-1, 0,n-1, 0,n-1, 0,n-1, 0,n-1,n,r);
 
