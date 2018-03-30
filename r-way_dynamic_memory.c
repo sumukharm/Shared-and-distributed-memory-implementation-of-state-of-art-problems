@@ -68,7 +68,8 @@ void D_fw(int *x, int x_start_row, int x_start_col, int *u, int u_start_row, int
 					D_fw(x, x_start_row+(i-1)*offset, x_start_col+(j-1)*offset, 
 						u, u_start_row+(i-1)*offset, u_start_col+(k-1)*offset,
 						v, v_start_row+(k-1)*offset, v_start_col+(j-1)*offset, n/r,r,N);
-			}	
+			}
+			cilk_sync;	
 		}
 	}
 }
@@ -87,7 +88,7 @@ void C_fw(int *x, int x_start_row, int x_start_col, int *u, int u_start_row, int
 			cilk_for(i=1; i<=r; i++)
 				C_fw(x, x_start_row+(i-1)*offset, x_start_col+(k-1)*offset, u, u_start_row+(i-1)*offset, 
 					u_start_col+(k-1)*offset, v, v_start_row+(k-1)*offset, v_start_col+(k-1)*offset, n/r, r,N);
-
+			cilk_sync;
 			cilk_for(i=1; i<=r; i++)
 			{
 				cilk_for(j=1; j<=r; j++)
@@ -98,7 +99,7 @@ void C_fw(int *x, int x_start_row, int x_start_col, int *u, int u_start_row, int
 							v, v_start_row+(k-1)*offset, v_start_col+(j-1)*offset, n/r,r,N);
 				}
 			}
-	
+			cilk_sync;
 		}
 	}
 }
@@ -119,6 +120,8 @@ void B_fw(int *x, int x_start_row, int x_start_col, int *u, int u_start_row, int
 				B_fw(x, x_start_row+(k-1)*offset, x_start_col+(j-1)*offset, u, u_start_row+(k-1)*offset,
 					u_start_col+(k-1)*offset, v, v_start_row+(k-1)*offset, v_start_col+(j-1)*offset, n/r, r,N);
 
+			cilk_sync;
+		
 			cilk_for(i=1; i<=r; i++)
 			{
 				cilk_for(j=1; j<=r; j++)
@@ -129,7 +132,9 @@ void B_fw(int *x, int x_start_row, int x_start_col, int *u, int u_start_row, int
 							v, v_start_row+(k-1)*offset, v_start_col+(j-1)*offset, n/r,r,N);
 				}
 			} 	
+			cilk_sync;
 		}
+
 	}	
 }
 
@@ -141,13 +146,13 @@ void A_fw(int *x, int x_start_row, int x_start_col, int *u, int u_start_row, int
         {
                 int offset=n/r;
                 int i,j,k;
-                cilk_for(k=1; k<=r; k++)
+                for(k=1; k<=r; k++)
                 {
                         A_fw(x,x_start_row+(k-1)*offset, x_start_col+(k-1)*offset, u, u_start_row+(k-1)*offset, u_start_col+(k-1)*offset, v,
                                 v_start_row+(k-1)*offset, v_start_col+(k-1)*offset, n/r, r, N);
 
                         
-                        for(i=1,j=1; i<=r && j<=r; i++, j++)
+                        cilk_for(i=1,j=1; i<=r && j<=r; i++, j++)
                         {
                                 if(j!=k)    
                                         cilk_spawn B_fw(x,x_start_row+(k-1)*offset, x_start_col+(j-1)*offset, u, u_start_row+(k-1)*offset,
@@ -159,17 +164,18 @@ void A_fw(int *x, int x_start_row, int x_start_col, int *u, int u_start_row, int
 
                         }
                         cilk_sync;
-                }
+                
 
-                cilk_for(i=1; i<=r; i++)
-                {
-			cilk_for(j=1; j<=r; j++)
-                        {
-                                if((i!=k) &&(j!=k))
-                                        cilk_spawn D_fw(x, x_start_row+(i-1)*offset, x_start_col+(j-1)*offset, u, u_start_row+(i-1)*offset,
+                	cilk_for(i=1; i<=r; i++)
+                	{
+				cilk_for(j=1; j<=r; j++)
+                        	{
+                                	if((i!=k) &&(j!=k))
+                                        	cilk_spawn D_fw(x, x_start_row+(i-1)*offset, x_start_col+(j-1)*offset, u, u_start_row+(i-1)*offset,
 							u_start_col+(k-1)*offset, v, v_start_row+(k-1)*offset, v_start_col+(j-1)*offset,n/r,r,N);			       }
+			}
+			cilk_sync;
 		}
-		cilk_sync;
 	}
 }
 
