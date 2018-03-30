@@ -1,0 +1,33 @@
+{
+        if(r>n)
+                A_loop_fw(x, x_start_row, x_start_col, u, u_start_row, u_start_col, v, v_start_row, v_start_col, n);
+        else
+        {
+                int offset=n/r;
+                int k;
+                cilk_for(k=1; k<=r; k++)
+                {
+                        A_fw(x,x_start_row+(k-1)*offset, x_start_col+(k-1)*offset, u, u_start_row+(k-1)*offset, u_start_col+(k-1)*offset, v,
+                                v_start_row+(k-1)*offset, v_start_col+(k-1)*offset, n/r, r);
+
+                        int i,j;
+                        for(i=1,j=1; i<=r && j<=r; i++, j++)
+                        {
+                                if(j!=k)    
+                                        cilk_spawn B_fw(x,x_start_row+(k-1)*offset, x_start_col+(k-1)*offset, u, u_start_row+(k-1)*offset,
+                                                   u_start_col+(k-1)*offset, v, v_start_row+(k-1)*offset, v_start_col+(j-1)*offset, n/r,r);
+
+                                if(i!=k)
+                                        cilk_spawn c_fw(x, x_start_row+(k-1)*offset, x_start_col+(k-1)*offset, u, u_start_row+(i-1)*offset,
+                                                   u_start_col+(k-1)*offset, v, v_start_row+(k-1)*offset, v_start_col+(k-1)*offset, n/r,r);
+
+                        }
+                        cilk_sync;
+                }
+
+                cilk_for(i=1; i<=r; i++)
+                {
+                        cilk_for(j=1; j<=r; j++)
+                        {
+                                if((i!=k) &&(j!=k))
+                                        cilk_spawn D_fw(x, x_start_row+(i-1)*offset, x_start_col+(j-1)*offset, u, u_start_row+

@@ -1,0 +1,44 @@
+void D_fw(int x[][100], int u[][100], int v[][100], int start_rowx, int end_rowx, int start_colx, int end_colx, int start_rowu, int end_rowu, int start_colu, int end_colu, int start_rowv, int end_rowv, int start_colv, int end_colv)
+{
+	int m=end_rowx-start_rowx;
+	if(m>r)
+		D_loop_fw(x,u,v,start_rowx,end_rowx,start_colx,end_colx,start_rowu,end_rowu,start_colu,end_colu,start_rowv,end_rowv, start_colv, end_colv);
+}
+
+void B_fw(int x[][100], int u[][100], int v[][100], int start_rowx, int end_rowx, int start_colx, int end_colx, int start_rowu, int end_rowu, int start_colu, int end_colu, int start_rowv, int end_rowv, int start_colv, int end_colv)
+{
+	int m=end_rowx-start_rowx;
+	if(m>r)
+		B_loop_fw(x,u,v,start_rowx,end_rowx,start_colx,end_colx,start_rowu,end_rowu,start_colu,end_colu,start_rowv,end_rowv, start_colv, end_colv);
+}
+
+void C_fw(int x[][100], int u[][100], int v[][100], int start_rowx, int end_rowx, int start_colx, int end_colx, int start_rowu, int end_rowu, int start_colu, int end_colu, int start_rowv, int end_rowv, int start_colv, int end_colv)
+{
+	int m=end_rowx-start_rowx;
+	if(m>r)
+		C_loop_fw(x,u,v,start_rowx,end_rowx,start_colx,end_colx,start_rowu,end_rowu,start_colu,end_colu,start_rowv,end_rowv, start_colv, end_colv);
+}
+
+void A_fw(int x[][100], int u[][100], int v[][100], int start_rowx, int end_rowx, int start_colx, int end_colx, int start_rowu, int end_rowu, int start_colu, int end_colu, int start_rowv, int end_rowv, int start_colv, int end_colv)
+{
+	int m=end_rowx-start_rowx;
+	if(m>r)
+		A_loop_fw(x,u,v,start_rowx,end_rowx,start_colx,end_colx,start_rowu,end_rowu,start_colu,end_colu,start_rowv,end_rowv, start_colv, end_colv);
+
+	else
+	{
+		int k;
+		
+	}
+}
+
+int main()
+{ 
+	int graph[100][100];
+	int n,r;
+	scanf("%d %d",&n,&r);
+	int i,j;
+	for(i=0; i<n; i++)
+		for(j=0; j<n; j++)
+			scanf("%d",&graph[i][j]);
+}

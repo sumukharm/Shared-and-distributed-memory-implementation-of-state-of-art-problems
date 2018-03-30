@@ -1,0 +1,27 @@
+#include<stdio.h>
+#define param1 2,3,4, 186
+#define param2 int a, int b, int c , int d
+#define param3 a,3,2
+#define param4 int arr[10], int n, int fac
+
+int add(param2)
+{
+	return a+b+c+d;
+}
+
+int add1(param4)
+{
+	int i;
+	int sum=0;
+	for(i=0; i<n; i++)
+		sum+=(arr[i]+fac);
+	return sum;
+}
+
+int main()
+{
+	printf("%d",add(param1));
+	int a[3]={10,20,30};
+	
+	return 0;
+}
