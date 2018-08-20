@@ -1,5 +1,3 @@
-
-
 // compile with :icpc -O3 -AVX  -xhost -o  fwr FW_rec.cpp  -ansi-alias -ip
 // -opt-subscript-in-range -opt-prefetch=4 -fomit-frame-pointer
 // -funroll-all-loops -vec-report  -parallel -restrict
